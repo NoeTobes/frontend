@@ -1,0 +1,59 @@
+<!-- Hero Section -->
+<div class="hero-section" style="min-height: 90vh; display: flex; align-items: center;">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-6 fade-in-up">
+        <h1 class="display-4 fw-bold mb-4">
+          Welcome to <span class="gradient-text">AuthMaster</span>
+        </h1>
+        <p class="lead mb-4" style="color: #4a5568;">
+          Complete authentication solution with JWT, refresh tokens, email verification, and password reset.
+        </p>
+        <div class="d-flex gap-3" *ngIf="!currentUser">
+          <a routerLink="/account/register" class="btn btn-gradient btn-lg rounded-pill px-5">
+            Get Started <i class="fas fa-arrow-right ms-2"></i>
+          </a>
+          <a routerLink="/account/login" class="btn btn-outline-gradient btn-lg rounded-pill px-5">
+            Sign In <i class="fas fa-sign-in-alt ms-2"></i>
+          </a>
+        </div>
+        <div class="d-flex gap-3" *ngIf="currentUser">
+          <a routerLink="/profile" class="btn btn-gradient btn-lg rounded-pill px-5">
+            Go to Dashboard <i class="fas fa-tachometer-alt ms-2"></i>
+          </a>
+        </div>
+      </div>
+      <div class="col-lg-6 text-center slide-in">
+        <i class="fas fa-shield-alt" style="font-size: 200px; color: #667eea;"></i>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Features Section -->
+<div class="container py-5">
+  <h2 class="text-center display-5 fw-bold mb-5 gradient-text">Features</h2>
+  <div class="row g-4">
+    <div class="col-md-4">
+      <div class="card h-100 text-center p-4">
+        <i class="fas fa-envelope fa-3x mb-3 gradient-text"></i>
+        <h4>Email Verification</h4>
+        <p class="text-muted">Secure email verification before account activation</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card h-100 text-center p-4">
+        <i class="fas fa-key fa-3x mb-3 gradient-text"></i>
+        <h4>JWT Authentication</h4>
+        <p class="text-muted">Secure token-based authentication with refresh tokens</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card h-100 text-center p-4">
+        <i class="fas fa-lock fa-3x mb-3 gradient-text"></i>
+        <h4>Password Reset</h4>
+        <p class="text-muted">Easy password recovery with email links</p>
+      </div>
+    </div>
+  </div>
+</div>

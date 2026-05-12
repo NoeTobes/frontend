@@ -1,0 +1,83 @@
+<div class="container mt-5 pt-4">
+  <div class="row">
+    <div class="col-lg-8 mx-auto">
+      <div class="card fade-in-up mb-4">
+        <div class="card-header text-center">
+          <h3 class="mb-0 text-white">Edit Profile</h3>
+        </div>
+        <div class="card-body p-4">
+          
+          <!-- Edit Profile Form -->
+          <h4 class="gradient-text mb-3">Personal Information</h4>
+          <form [formGroup]="profileForm" (ngSubmit)="onSubmitProfile()">
+            <div class="row">
+              <div class="col-md-4 mb-3">
+                <label class="form-label">Title</label>
+                <select formControlName="title" class="form-select">
+                  <option value="Mr">Mr</option>
+                  <option value="Mrs">Mrs</option>
+                  <option value="Miss">Miss</option>
+                  <option value="Ms">Ms</option>
+                  <option value="Dr">Dr</option>
+                </select>
+              </div>
+              <div class="col-md-4 mb-3">
+                <label class="form-label">First Name</label>
+                <input type="text" formControlName="firstName" class="form-control">
+              </div>
+              <div class="col-md-4 mb-3">
+                <label class="form-label">Last Name</label>
+                <input type="text" formControlName="lastName" class="form-control">
+              </div>
+            </div>
+            
+            <div class="mb-4">
+              <label class="form-label">Email Address</label>
+              <input type="email" formControlName="email" class="form-control">
+            </div>
+            
+            <button type="submit" class="btn btn-gradient w-100 py-2 rounded-pill" [disabled]="loading">
+              <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+              {{ loading ? 'Updating...' : 'Update Profile' }}
+            </button>
+          </form>
+          
+          <hr class="my-5">
+          
+          <!-- Change Password Form -->
+          <h4 class="gradient-text mb-3">Change Password</h4>
+          <form [formGroup]="passwordForm" (ngSubmit)="onChangePassword()">
+            <div class="mb-3">
+              <label class="form-label">Current Password</label>
+              <input type="password" formControlName="currentPassword" class="form-control">
+            </div>
+            
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">New Password</label>
+                <input type="password" formControlName="newPassword" class="form-control">
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Confirm Password</label>
+                <input type="password" formControlName="confirmPassword" class="form-control"
+                       [class.is-invalid]="passwordForm.hasError('mismatch') && passwordForm.get('confirmPassword')?.touched">
+                <div class="invalid-feedback">Passwords do not match</div>
+              </div>
+            </div>
+            
+            <button type="submit" class="btn btn-outline-gradient w-100 py-2 rounded-pill" [disabled]="passwordLoading">
+              <span *ngIf="passwordLoading" class="spinner-border spinner-border-sm me-2"></span>
+              {{ passwordLoading ? 'Changing...' : 'Change Password' }}
+            </button>
+          </form>
+          
+          <div class="text-center mt-4">
+            <a routerLink="/profile" class="text-decoration-none">
+              <i class="fas fa-arrow-left me-1"></i> Back to Profile
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

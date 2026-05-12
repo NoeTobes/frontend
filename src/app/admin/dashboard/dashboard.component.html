@@ -1,0 +1,80 @@
+<div class="container-fluid mt-4">
+  <h1 class="mb-4 gradient-text">Admin Dashboard</h1>
+  
+  <!-- Statistics Cards -->
+  <div class="row g-4 mb-4">
+    <div class="col-md-3">
+      <div class="card text-white bg-primary">
+        <div class="card-body">
+          <h5 class="card-title">Total Users</h5>
+          <h2 class="display-4">{{ stats.totalUsers }}</h2>
+          <i class="fas fa-users fa-2x position-absolute" style="bottom: 15px; right: 20px; opacity: 0.3;"></i>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-3">
+      <div class="card text-white bg-success">
+        <div class="card-body">
+          <h5 class="card-title">Verified Users</h5>
+          <h2 class="display-4">{{ stats.verifiedUsers }}</h2>
+          <i class="fas fa-check-circle fa-2x position-absolute" style="bottom: 15px; right: 20px; opacity: 0.3;"></i>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-3">
+      <div class="card text-white bg-info">
+        <div class="card-body">
+          <h5 class="card-title">Admin Users</h5>
+          <h2 class="display-4">{{ stats.adminUsers }}</h2>
+          <i class="fas fa-shield-alt fa-2x position-absolute" style="bottom: 15px; right: 20px; opacity: 0.3;"></i>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-3">
+      <div class="card text-white bg-warning">
+        <div class="card-body">
+          <h5 class="card-title">New This Month</h5>
+          <h2 class="display-4">{{ stats.newUsersThisMonth }}</h2>
+          <i class="fas fa-calendar-alt fa-2x position-absolute" style="bottom: 15px; right: 20px; opacity: 0.3;"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Recent Users -->
+  <div class="card">
+    <div class="card-header bg-primary text-white">
+      <h5 class="mb-0">Recent Users</h5>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Verified</th>
+              <th>Joined</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let user of recentUsers">
+              <td>{{ user.firstName }} {{ user.lastName }}</td>
+              <td>{{ user.email }}</td>
+              <td><span class="badge" [class.bg-primary]="user.role === 'Admin'" [class.bg-secondary]="user.role === 'User'">{{ user.role }}</span></td>
+              <td><i class="fas" [class.fa-check-circle]="user.isVerified" [class.fa-times-circle]="!user.isVerified" [class.text-success]="user.isVerified" [class.text-danger]="!user.isVerified"></i></td>
+              <td>{{ user.createdAt | date:'mediumDate' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card-footer text-center">
+      <a routerLink="/admin/users" class="btn btn-primary">View All Users</a>
+    </div>
+  </div>
+</div>
