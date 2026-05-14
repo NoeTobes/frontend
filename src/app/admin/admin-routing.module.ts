@@ -5,7 +5,7 @@ import { UsersComponent } from './users/users.component';
 import { UserFormComponent } from './user-form/user-form.component';
 import { AuthGuard } from '../services/auth.guard';
 import { AdminGuard } from '../services/admin.guard';
-
+import { ActivityLogsComponent } from './activity-logs/activity-logs.component';
 const routes: Routes = [
   { 
     path: '', 
@@ -26,7 +26,8 @@ const routes: Routes = [
     path: 'users/edit/:id',
     component: UserFormComponent,
     canActivate: [AuthGuard, AdminGuard]
-  }
+  },
+  { path: 'logs', component: ActivityLogsComponent }
 ];
 
 @NgModule({

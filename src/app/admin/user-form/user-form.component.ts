@@ -46,7 +46,7 @@ export class UserFormComponent implements OnInit {
   loadUserData() {
     this.loading = true;
     this.authService.getUserById(this.userId).subscribe({
-      next: (user) => {
+      next: (user: any) => {
         this.userForm.patchValue({
           title: user.title,
           firstName: user.firstName,
@@ -61,7 +61,7 @@ export class UserFormComponent implements OnInit {
         }
         this.loading = false;
       },
-      error: (error) => {
+      error: (error: any) => {
         this.alertService.error('Failed to load user data');
         this.router.navigate(['/admin/users']);
         this.loading = false;
@@ -83,18 +83,19 @@ export class UserFormComponent implements OnInit {
           this.alertService.success('User updated successfully');
           this.router.navigate(['/admin/users']);
         },
-        error: (error) => {
+        error: (error: any) => {
           this.alertService.error(error.error?.message || 'Update failed');
           this.loading = false;
         }
       });
     } else {
+      delete formData.confirmPassword;
       this.authService.createUser(formData).subscribe({
         next: () => {
           this.alertService.success('User created successfully');
           this.router.navigate(['/admin/users']);
         },
-        error: (error) => {
+        error: (error: any) => {
           this.alertService.error(error.error?.message || 'Creation failed');
           this.loading = false;
         }

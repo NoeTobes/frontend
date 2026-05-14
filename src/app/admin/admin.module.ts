@@ -6,18 +6,20 @@ import { AdminRoutingModule } from './admin-routing.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { UsersComponent } from './users/users.component';
 import { UserFormComponent } from './user-form/user-form.component';
+import { ActivityLogsComponent } from './activity-logs/activity-logs.component';
 
 @NgModule({
   declarations: [
     DashboardComponent,
     UsersComponent,
-    UserFormComponent
+    UserFormComponent,
+    ActivityLogsComponent
   ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
-    RouterModule,  // Add this for routerLink
+    RouterModule,
     AdminRoutingModule
   ]
 })

@@ -13,6 +13,7 @@ export interface User {
   isVerified?: boolean;
   createdAt?: Date;
   profilePicture?: string;
+  twoFactorEnabled?: boolean;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -39,19 +40,43 @@ export class AuthService {
     this.currentUserSubject.next(user);
   }
 
-  login(email: string, password: string, rememberMe: boolean = false): Observable<User> {
+  login(email: string, password: string, rememberMe: boolean = false): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/accounts/authenticate`, 
       { email, password }, 
       { withCredentials: true }
     ).pipe(map(response => {
+      console.log('Login API response:', response);
+      
+      if (response && response.requiresTwoFactor) {
+        return response;
+      }
+      
       if (response && response.account) {
         if (rememberMe) {
           localStorage.setItem('currentUser', JSON.stringify(response.account));
         }
         localStorage.setItem('accessToken', response.accessToken);
         this.currentUserSubject.next(response.account);
+        return response.account;
       }
-      return response.account;
+      return response;
+    }));
+  }
+
+  completeTwoFactorLogin(userId: number, code: string): Observable<User> {
+    return this.http.post<any>(`${this.apiUrl}/accounts/authenticate-2fa`, 
+      { userId, code }, 
+      { withCredentials: true }
+    ).pipe(map(response => {
+      console.log('2FA complete response:', response);
+      
+      if (response && response.account) {
+        localStorage.setItem('currentUser', JSON.stringify(response.account));
+        localStorage.setItem('accessToken', response.accessToken);
+        this.currentUserSubject.next(response.account);
+        return response.account;
+      }
+      return response;
     }));
   }
 
@@ -75,7 +100,6 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/accounts/reset-password`, { token, password });
   }
 
-  // User management methods (keep only one copy)
   getUserById(id: number): Observable<User> {
     return this.http.get<User>(`${this.apiUrl}/accounts/${id}`);
   }
@@ -95,7 +119,6 @@ export class AuthService {
     return this.http.delete(`${this.apiUrl}/accounts/${id}`);
   }
 
-  // Admin methods
   getAllUsers(): Observable<User[]> {
     return this.http.get<User[]>(`${this.apiUrl}/accounts`);
   }
@@ -112,7 +135,6 @@ export class AuthService {
     return this.http.delete(`${this.apiUrl}/accounts/${id}`);
   }
 
-  // Upload profile picture
   uploadProfilePicture(formData: FormData): Observable<any> {
     const token = this.getToken();
     return this.http.post(`${this.apiUrl}/api/upload/profile-picture`, formData, {
@@ -131,4 +153,8 @@ export class AuthService {
   getToken(): string | null {
     return localStorage.getItem('accessToken');
   }
+  // Add this method to check if user is logged in
+isLoggedIn(): boolean {
+  return this.currentUserValue !== null;
+}
 }

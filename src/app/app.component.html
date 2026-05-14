@@ -1,14 +1,28 @@
 <!-- Navigation Bar -->
 <nav class="navbar navbar-expand-lg fixed-top" [ngClass]="{'navbar-dark bg-dark': (isDarkMode | async), 'navbar-light bg-white shadow-sm': !(isDarkMode | async)}">
   <div class="container">
+    <!-- Brand/Logo -->
     <a class="navbar-brand fw-bold" routerLink="/" style="font-size: 1.5rem;">
       ✨ Auth<span class="gradient-text">Master</span>
     </a>
     
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+    <!-- Hamburger button - MUST have these attributes -->
+<button class="navbar-toggler" 
+        type="button" 
+        data-bs-toggle="collapse" 
+        data-bs-target="#navbarNav" 
+        aria-controls="navbarNav" 
+        aria-expanded="false" 
+        aria-label="Toggle navigation">
+  <span class="navbar-toggler-icon"></span>
+</button>
+
+<!-- Collapsible div - MUST have matching id -->
+<div class="collapse navbar-collapse" id="navbarNav">
+  <!-- menu content here -->
+</div>
     
+    <!-- Collapsible Menu - Make sure the id matches data-bs-target -->
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav mx-auto">
         <li class="nav-item">
@@ -18,17 +32,17 @@
           <a class="nav-link fw-semibold" routerLink="/profile">Profile</a>
         </li>
         <li class="nav-item" *ngIf="authService.currentUserValue?.role === 'Admin'">
-          <a class="nav-link fw-semibold" routerLink="/admin">
-            <i class="fas fa-shield-alt me-1"></i>Admin
-          </a>
+          <a class="nav-link fw-semibold" routerLink="/admin">Admin</a>
         </li>
       </ul>
       
+      <!-- Auth Buttons -->
       <div class="d-flex gap-2" *ngIf="!authService.currentUserValue">
         <a routerLink="/account/login" class="btn btn-outline-gradient rounded-pill px-4">Login</a>
         <a routerLink="/account/register" class="btn btn-gradient rounded-pill px-4 text-white">Register</a>
       </div>
       
+      <!-- User Menu -->
       <div class="dropdown" *ngIf="authService.currentUserValue">
         <button class="btn btn-gradient rounded-pill px-4 dropdown-toggle" type="button" data-bs-toggle="dropdown">
           👋 {{ authService.currentUserValue?.firstName }}
@@ -40,6 +54,7 @@
         </ul>
       </div>
       
+      <!-- Theme Toggle -->
       <button class="btn btn-icon ms-2" (click)="toggleTheme()" 
               [ngClass]="{'btn-outline-light': (isDarkMode | async), 'btn-outline-secondary': !(isDarkMode | async)}"
               style="border-radius: 50%; width: 40px; height: 40px;">

@@ -1,0 +1,31 @@
+.gradient-text {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.btn-group .btn {
+  border-radius: 4px;
+  margin-left: 5px;
+}
+
+.btn-group .btn:first-child {
+  margin-left: 0;
+}
+
+.table input[type="checkbox"] {
+  cursor: pointer;
+  width: 18px;
+  height: 18px;
+}
+
+.btn-sm {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+}
+
+.badge {
+  font-size: 0.85rem;
+  padding: 5px 10px;
+}

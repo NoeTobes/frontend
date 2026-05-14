@@ -31,13 +31,23 @@ export class DashboardComponent implements OnInit {
         this.stats.verifiedUsers = users.filter(u => u.isVerified).length;
         this.stats.adminUsers = users.filter(u => u.role === 'Admin').length;
         this.stats.newUsersThisMonth = users.filter(u => {
-          const createdAt = new Date(u.createdAt!);
-          return createdAt >= firstDayOfMonth;
+          const createdAt = u.createdAt ? new Date(u.createdAt) : null;
+          return createdAt && createdAt >= firstDayOfMonth;
         }).length;
         
         this.recentUsers = users.slice(-5).reverse();
       },
       error: (error) => console.error('Error loading stats:', error)
+    });
+  }
+
+  formatDate(dateValue: Date | string | undefined): string {
+    if (!dateValue) return 'N/A';
+    const date = dateValue instanceof Date ? dateValue : new Date(dateValue);
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
     });
   }
 }

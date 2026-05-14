@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AuthService, User } from './services/auth.service';
 import { ThemeService } from './services/theme.service';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -21,6 +21,19 @@ export class AppComponent {
     this.isDarkMode = this.themeService.isDarkMode$;
     this.authService.currentUser.subscribe(user => {
       this.currentUser = user;
+    });
+
+    // Listen to route changes and redirect if needed
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        // If user is logged in and tries to access login/register page, redirect to home
+        if (this.authService.currentUserValue) {
+          const restrictedRoutes = ['/account/login', '/account/register', '/account/forgot-password'];
+          if (restrictedRoutes.includes(event.urlAfterRedirects)) {
+            this.router.navigate(['/']);
+          }
+        }
+      }
     });
   }
 

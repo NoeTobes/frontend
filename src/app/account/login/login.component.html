@@ -1,49 +1,97 @@
-<div class="container mt-5 pt-5">
+<div class="container mt-5">
   <div class="row">
-    <div class="col-lg-5 col-md-8 mx-auto">
-      <div class="card fade-in-up">
-        <div class="card-header text-center">
-          <h3 class="mb-0 text-white">Welcome Back! 👋</h3>
+    <div class="col-md-6 offset-md-3">
+      <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+          <h3 class="mb-0">{{ showTwoFactor ? 'Two-Factor Authentication' : 'Welcome Back!' }}</h3>
         </div>
-        <div class="card-body p-5">
-          <div *ngIf="successMessage" class="alert alert-success">
-            {{ successMessage }}
-          </div>
-          <div *ngIf="errorMessage" class="alert alert-danger">
-            {{ errorMessage }}
-          </div>
+        <div class="card-body">
           
-          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-            <div class="mb-4">
-              <label class="form-label fw-semibold">Email Address</label>
-              <input type="email" formControlName="email" class="form-control"
-                     placeholder="Enter your email"
-                     [class.is-invalid]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
-              <div class="invalid-feedback">Valid email is required</div>
+          <!-- Success Message -->
+          <div *ngIf="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i>
+            {{ successMessage }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+          </div>
+
+          <!-- Error Message -->
+          <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            {{ errorMessage }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+          </div>
+
+          <!-- Normal Login Form -->
+          <form *ngIf="!showTwoFactor" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+            <div class="mb-3">
+              <label for="email" class="form-label">Email Address</label>
+              <input type="email" id="email" formControlName="email" class="form-control" 
+                     [class.is-invalid]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
+                     placeholder="Enter your email">
+              <div class="invalid-feedback">
+                <span *ngIf="loginForm.get('email')?.errors?.['required']">Email is required</span>
+                <span *ngIf="loginForm.get('email')?.errors?.['email']">Please enter a valid email address</span>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="password" class="form-label">Password</label>
+              <input type="password" id="password" formControlName="password" class="form-control" 
+                     [class.is-invalid]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+                     placeholder="Enter your password">
+              <div class="invalid-feedback">
+                <span *ngIf="loginForm.get('password')?.errors?.['required']">Password is required</span>
+                <span *ngIf="loginForm.get('password')?.errors?.['minlength']">Password must be at least 6 characters</span>
+              </div>
+            </div>
+
+            <div class="mb-3 form-check">
+              <input type="checkbox" id="rememberMe" formControlName="rememberMe" class="form-check-input">
+              <label for="rememberMe" class="form-check-label">Remember me</label>
+            </div>
+
+            <div class="d-grid gap-2">
+              <button type="submit" class="btn btn-primary btn-lg" [disabled]="loading">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+                {{ loading ? 'Signing in...' : 'Sign In' }}
+              </button>
+            </div>
+
+            <div class="mt-3 text-center">
+              <a routerLink="/account/register" class="text-decoration-none me-3">Create Account</a>
+              <span class="text-muted">|</span>
+              <a routerLink="/account/forgot-password" class="text-decoration-none ms-3">Forgot Password?</a>
+            </div>
+          </form>
+
+          <!-- 2FA Verification Form -->
+          <form *ngIf="showTwoFactor" [formGroup]="twoFactorForm" (ngSubmit)="verifyTwoFactor()">
+            <div class="alert alert-info">
+              <i class="fas fa-shield-alt me-2"></i>
+              <strong>Two-Factor Authentication Required</strong><br>
+              Please enter the 6-digit code from your Google Authenticator app.
+              <small class="d-block mt-2 text-muted">If you haven't set up 2FA, please contact support.</small>
             </div>
             
-            <div class="mb-4">
-              <label class="form-label fw-semibold">Password</label>
-              <input type="password" formControlName="password" class="form-control"
-                     placeholder="Enter your password"
-                     [class.is-invalid]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
-              <div class="invalid-feedback">Password is required</div>
+            <div class="mb-3">
+              <label for="code" class="form-label">Authentication Code</label>
+              <input type="text" id="code" formControlName="code" class="form-control text-center" 
+                     [class.is-invalid]="twoFactorForm.get('code')?.invalid && twoFactorForm.get('code')?.touched"
+                     placeholder="000000" maxlength="6" 
+                     style="font-size: 32px; letter-spacing: 10px; text-align: center;">
+              <div class="invalid-feedback text-center">
+                Please enter a valid 6-digit code
+              </div>
             </div>
-            
-            <div class="mb-4 form-check">
-              <input type="checkbox" formControlName="rememberMe" class="form-check-input">
-              <label class="form-check-label">Remember me</label>
-            </div>
-            
-            <button type="submit" class="btn btn-gradient w-100 py-3 rounded-pill fw-semibold" [disabled]="loading">
-              <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
-              {{ loading ? 'Signing in...' : 'Sign In' }}
-            </button>
-            
-            <div class="text-center mt-4">
-              <a routerLink="/account/forgot-password" class="text-decoration-none">Forgot Password?</a>
-              <span class="mx-2 text-muted">|</span>
-              <a routerLink="/account/register" class="text-decoration-none">Create Account</a>
+
+            <div class="d-grid gap-2">
+              <button type="submit" class="btn btn-success btn-lg" [disabled]="loading">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+                {{ loading ? 'Verifying...' : 'Verify & Login' }}
+              </button>
+              <button type="button" class="btn btn-link" (click)="backToLogin()">
+                <i class="fas fa-arrow-left me-1"></i> Back to Login
+              </button>
             </div>
           </form>
         </div>
