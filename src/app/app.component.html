@@ -6,23 +6,18 @@
       ✨ Auth<span class="gradient-text">Master</span>
     </a>
     
-    <!-- Hamburger button - MUST have these attributes -->
-<button class="navbar-toggler" 
-        type="button" 
-        data-bs-toggle="collapse" 
-        data-bs-target="#navbarNav" 
-        aria-controls="navbarNav" 
-        aria-expanded="false" 
-        aria-label="Toggle navigation">
-  <span class="navbar-toggler-icon"></span>
-</button>
-
-<!-- Collapsible div - MUST have matching id -->
-<div class="collapse navbar-collapse" id="navbarNav">
-  <!-- menu content here -->
-</div>
+    <!-- Hamburger button -->
+    <button class="navbar-toggler" 
+            type="button" 
+            data-bs-toggle="collapse" 
+            data-bs-target="#navbarNav" 
+            aria-controls="navbarNav" 
+            aria-expanded="false" 
+            aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
     
-    <!-- Collapsible Menu - Make sure the id matches data-bs-target -->
+    <!-- Collapsible Menu -->
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav mx-auto">
         <li class="nav-item">
@@ -36,24 +31,35 @@
         </li>
       </ul>
       
-      <!-- Auth Buttons -->
+      <!-- Auth Buttons (when not logged in) -->
       <div class="d-flex gap-2" *ngIf="!authService.currentUserValue">
         <a routerLink="/account/login" class="btn btn-outline-gradient rounded-pill px-4">Login</a>
         <a routerLink="/account/register" class="btn btn-gradient rounded-pill px-4 text-white">Register</a>
       </div>
       
-      <!-- User Menu -->
+      <!-- User Menu (when logged in) -->
       <div class="dropdown" *ngIf="authService.currentUserValue">
         <button class="btn btn-gradient rounded-pill px-4 dropdown-toggle" type="button" data-bs-toggle="dropdown">
           👋 {{ authService.currentUserValue?.firstName }}
         </button>
         <ul class="dropdown-menu dropdown-menu-end">
           <li><a class="dropdown-item" routerLink="/profile">📱 Profile</a></li>
+          <li><a class="dropdown-item" routerLink="/admin" *ngIf="authService.currentUserValue?.role === 'Admin'">👑 Admin Panel</a></li>
           <li><hr class="dropdown-divider"></li>
-          <li><a class="dropdown-item text-danger" (click)="logout()">🚪 Logout</a></li>
+          <li><a class="dropdown-item text-danger" (click)="logout()" style="cursor: pointer;">🚪 Logout</a></li>
         </ul>
       </div>
-      
+
+      <!-- Simple Working Menu (No Dropdown) -->
+<div class="d-flex gap-2 align-items-center" *ngIf="authService.currentUserValue">
+  <span class="text-white">
+    <i class="fas fa-user-circle me-1"></i>
+    {{ authService.currentUserValue?.firstName }}
+  </span>
+  <button class="btn btn-danger btn-sm rounded-pill" (click)="logout()">
+    <i class="fas fa-sign-out-alt me-1"></i>Logout
+  </button>
+</div>
       <!-- Theme Toggle -->
       <button class="btn btn-icon ms-2" (click)="toggleTheme()" 
               [ngClass]="{'btn-outline-light': (isDarkMode | async), 'btn-outline-secondary': !(isDarkMode | async)}"
