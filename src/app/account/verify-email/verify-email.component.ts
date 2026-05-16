@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '@environments/environment';  // ← Add this at TOP
 
 @Component({
   selector: 'app-verify-email',
@@ -14,9 +15,7 @@ import { HttpClient } from '@angular/common/http';
             </div>
             <div class="card-body text-center">
               <div *ngIf="loading" class="text-center">
-                <div class="spinner-border text-primary" role="status">
-                  <span class="visually-hidden">Verifying...</span>
-                </div>
+                <div class="spinner-border text-primary"></div>
                 <p class="mt-3">Verifying your email...</p>
               </div>
               
@@ -54,8 +53,6 @@ export class VerifyEmailComponent implements OnInit {
   ngOnInit(): void {
     const token = this.route.snapshot.queryParamMap.get('token');
     
-    console.log('Token from URL:', token);
-    
     if (!token) {
       this.loading = false;
       this.error = true;
@@ -63,7 +60,8 @@ export class VerifyEmailComponent implements OnInit {
       return;
     }
 
-    this.http.post('http://localhost:3000/accounts/verify-email', { token })
+    // Use environment API URL
+    this.http.post(`${environment.apiUrl}/accounts/verify-email`, { token })
       .subscribe({
         next: (response: any) => {
           this.loading = false;
@@ -76,7 +74,7 @@ export class VerifyEmailComponent implements OnInit {
         error: (error) => {
           this.loading = false;
           this.error = true;
-          this.errorMessage = error.error?.message || 'Verification failed. Invalid or expired token.';
+          this.errorMessage = error.error?.message || 'Verification failed.';
         }
       });
   }

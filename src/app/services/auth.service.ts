@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-
+import { environment } from '../../environments/environment';
 export interface User {
   id: number;
   email: string;
@@ -20,7 +20,7 @@ export interface User {
 export class AuthService {
   private currentUserSubject: BehaviorSubject<User | null>;
   public currentUser: Observable<User | null>;
-  private apiUrl = 'http://localhost:3000';
+  private apiUrl = environment.apiUrl;  // ← Now this works because import is at top
 
   constructor(private http: HttpClient) {
     this.currentUserSubject = new BehaviorSubject<User | null>(null);
@@ -153,8 +153,8 @@ export class AuthService {
   getToken(): string | null {
     return localStorage.getItem('accessToken');
   }
-  // Add this method to check if user is logged in
-isLoggedIn(): boolean {
-  return this.currentUserValue !== null;
-}
+
+  isLoggedIn(): boolean {
+    return this.currentUserValue !== null;
+  }
 }

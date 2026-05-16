@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../services/auth.service';
+import { environment } from '../../../environments/environment';
 
 interface ActivityLog {
   id: number;
@@ -25,7 +26,7 @@ export class ActivityLogsComponent implements OnInit {
   selectedAction = '';
   actions: string[] = [];
   total = 0;
-  apiUrl = 'http://localhost:3000';
+  apiUrl = environment.apiUrl;  // ← Use environment
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
@@ -96,18 +97,12 @@ export class ActivityLogsComponent implements OnInit {
     return classes[action] || 'bg-secondary';
   }
 
+  formatDate(dateString: string): string {
+    const date = new Date(dateString);
+    return date.toLocaleString();
+  }
+
   refresh() {
     this.loadLogs();
   }
-  formatDate(dateString: string): string {
-  const date = new Date(dateString);
-  return date.toLocaleString('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit'
-  });
-}
 }

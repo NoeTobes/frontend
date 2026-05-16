@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
-
+import { environment } from '../../environments/environment';
 @Injectable({ providedIn: 'root' })
 export class TwoFactorService {
-  private apiUrl = 'http://localhost:3000/api/2fa';
+  private apiUrl = `${environment.apiUrl}/api/2fa`;  // ← Now this works
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 

@@ -3,7 +3,7 @@ import { AuthService, User } from '../services/auth.service';
 import { AlertService } from '../services/alert.service';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-
+import { environment } from '../../environments/environment';; 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -14,7 +14,7 @@ export class ProfileComponent implements OnInit {
   loading = true;
   profilePictureUrl: string | null = null;
   uploading = false;
-  apiUrl = 'http://localhost:3000';
+apiUrl = environment.apiUrl;
   imageVersion: number = 0;  // Add this property
 
   constructor(
