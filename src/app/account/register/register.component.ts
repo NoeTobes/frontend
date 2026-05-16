@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-register',
@@ -47,9 +48,25 @@ export class RegisterComponent implements OnInit {
   }
 
   onSubmit(): void {
+    // Debug: Log form validity
+    console.log('Form valid:', this.registerForm.valid);
+    console.log('Form errors:', this.registerForm.errors);
+    console.log('Password errors:', this.f['password']?.errors);
+    console.log('ConfirmPassword errors:', this.f['confirmPassword']?.errors);
+    console.log('AcceptTerms value:', this.f['acceptTerms']?.value);
+
     // Stop if form is invalid
     if (this.registerForm.invalid) {
-      this.errorMessage = 'Please fill all required fields correctly';
+      // Show specific error message
+      if (this.f['password']?.errors?.['minlength']) {
+        this.errorMessage = 'Password must be at least 6 characters';
+      } else if (this.registerForm.errors?.['mismatch']) {
+        this.errorMessage = 'Passwords do not match';
+      } else if (!this.f['acceptTerms']?.value) {
+        this.errorMessage = 'You must accept the Terms and Conditions';
+      } else {
+        this.errorMessage = 'Please fill all required fields correctly';
+      }
       return;
     }
 
@@ -67,6 +84,7 @@ export class RegisterComponent implements OnInit {
       acceptTerms: this.f['acceptTerms'].value
     };
 
+    console.log('Sending registration data to:', `${environment.apiUrl}/accounts/register`);
     console.log('Sending registration data:', registerData);
 
     this.authService.register(registerData)
@@ -92,7 +110,7 @@ export class RegisterComponent implements OnInit {
           if (error.error?.message) {
             this.errorMessage = error.error.message;
           } else if (error.status === 0) {
-            this.errorMessage = 'Cannot connect to backend. Make sure backend is running on port 3000';
+            this.errorMessage = 'Cannot connect to backend. Make sure backend is running.';
           } else {
             this.errorMessage = 'Registration failed. Please try again.';
           }

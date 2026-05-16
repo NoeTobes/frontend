@@ -17,43 +17,66 @@
             <div class="row">
               <div class="col-md-4 mb-3">
                 <label class="form-label fw-semibold">Title</label>
-                <select formControlName="title" class="form-select">
+                <select formControlName="title" class="form-select" [class.is-invalid]="f['title'].invalid && (f['title'].dirty || f['title'].touched)">
                   <option value="Mr">Mr</option>
                   <option value="Mrs">Mrs</option>
                   <option value="Miss">Miss</option>
                   <option value="Ms">Ms</option>
                   <option value="Dr">Dr</option>
                 </select>
+                <div class="invalid-feedback" *ngIf="f['title'].invalid && (f['title'].dirty || f['title'].touched)">
+                  Title is required
+                </div>
               </div>
               <div class="col-md-4 mb-3">
                 <label class="form-label fw-semibold">First Name</label>
-                <input type="text" formControlName="firstName" class="form-control" placeholder="First name">
+                <input type="text" formControlName="firstName" class="form-control" placeholder="First name" [class.is-invalid]="f['firstName'].invalid && (f['firstName'].dirty || f['firstName'].touched)">
+                <div class="invalid-feedback" *ngIf="f['firstName'].invalid && (f['firstName'].dirty || f['firstName'].touched)">
+                  First Name is required
+                </div>
               </div>
               <div class="col-md-4 mb-3">
                 <label class="form-label fw-semibold">Last Name</label>
-                <input type="text" formControlName="lastName" class="form-control" placeholder="Last name">
+                <input type="text" formControlName="lastName" class="form-control" placeholder="Last name" [class.is-invalid]="f['lastName'].invalid && (f['lastName'].dirty || f['lastName'].touched)">
+                <div class="invalid-feedback" *ngIf="f['lastName'].invalid && (f['lastName'].dirty || f['lastName'].touched)">
+                  Last Name is required
+                </div>
               </div>
             </div>
             
             <div class="mb-3">
               <label class="form-label fw-semibold">Email Address</label>
-              <input type="email" formControlName="email" class="form-control" placeholder="Enter your email">
+              <input type="email" formControlName="email" class="form-control" placeholder="Enter your email" [class.is-invalid]="f['email'].invalid && (f['email'].dirty || f['email'].touched)">
+              <div class="invalid-feedback" *ngIf="f['email'].invalid && (f['email'].dirty || f['email'].touched)">
+                <span *ngIf="f['email'].errors?.['required']">Email is required</span>
+                <span *ngIf="f['email'].errors?.['email']">Please enter a valid email address</span>
+              </div>
             </div>
             
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label class="form-label fw-semibold">Password</label>
-                <input type="password" formControlName="password" class="form-control" placeholder="Min 6 characters">
+                <input type="password" formControlName="password" class="form-control" placeholder="Min 6 characters" [class.is-invalid]="f['password'].invalid && (f['password'].dirty || f['password'].touched)">
+                <div class="invalid-feedback" *ngIf="f['password'].invalid && (f['password'].dirty || f['password'].touched)">
+                  <span *ngIf="f['password'].errors?.['required']">Password is required</span>
+                  <span *ngIf="f['password'].errors?.['minlength']">Password must be at least 6 characters</span>
+                </div>
               </div>
               <div class="col-md-6 mb-3">
                 <label class="form-label fw-semibold">Confirm Password</label>
-                <input type="password" formControlName="confirmPassword" class="form-control" placeholder="Confirm password">
+                <input type="password" formControlName="confirmPassword" class="form-control" placeholder="Confirm password" [class.is-invalid]="(registerForm.errors?.['mismatch'] && (f['confirmPassword'].dirty || f['confirmPassword'].touched))">
+                <div class="invalid-feedback" *ngIf="registerForm.errors?.['mismatch'] && (f['confirmPassword'].dirty || f['confirmPassword'].touched)">
+                  Passwords do not match
+                </div>
               </div>
             </div>
             
             <div class="mb-4 form-check">
-              <input type="checkbox" formControlName="acceptTerms" class="form-check-input">
+              <input type="checkbox" formControlName="acceptTerms" class="form-check-input" [class.is-invalid]="f['acceptTerms'].invalid && (f['acceptTerms'].dirty || f['acceptTerms'].touched)">
               <label class="form-check-label">I accept the Terms and Conditions</label>
+              <div class="invalid-feedback" *ngIf="f['acceptTerms'].invalid && (f['acceptTerms'].dirty || f['acceptTerms'].touched)">
+                You must accept the Terms and Conditions
+              </div>
             </div>
             
             <button type="submit" class="btn btn-gradient w-100 py-3 rounded-pill fw-semibold" [disabled]="loading">
