@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:3000'
+  apiUrl: 'https://auth-backend-28h4.onrender.com'  // ← Same URL for consistency
 };
